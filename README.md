@@ -7,29 +7,6 @@
 <p align="center"><a href="https://seleniumbase.io"><img src="https://img.shields.io/badge/docs-seleniumbase.io-11BBAA.svg" alt="SeleniumBase Docs"/><br><img src="https://img.shields.io/badge/Framework-Selenium-blue" alt="Selenium"></a></p>
 
 
-## Содержание
-
-- [Требования](#требования)
-- [Установка Amazon Corretto (JDK)](#установка-amazon-corretto-jdk)
-- [Настройка IntelliJ IDEA](#настройка-intellij-idea)
-- [Структура проекта](#структура-проекта)
-- [Зависимости Maven](#зависимости-maven)
-- [Запуск тестов](#запуск-тестов)
-- [Selenium Server Standalone](#selenium-server-standalone)
-- [ChromeDriver](#chromedriver)
-- [Полезные ссылки](#полезные-ссылки)
-
----
-
-## Требования
-
-- **ОС:** Windows 
-- **Amazon Corretto JDK:** 11 или 17 (LTS).
-- **IntelliJ IDEA Community/Ultimate.**
-- **Maven 3.6+.**
-- **Google Chrome** (совместимой версии с ChromeDriver).
-
----
 
 # 📥 Установка Amazon Corretto (JDK)
 
