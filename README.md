@@ -404,169 +404,8 @@ public class TestExample {
 4. **Если всё же вручную** — не забудьте закинуть все файлы из папки `libs/` в проект, иначе могут быть ошибки зависимостей.
 5. **Следите за совместимостью версий Selenium и WebDriver
    
-### Примеры тестов:
- * Выбор определенного чекбокса
-```java
-package tests;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public class WebDriverCheckboxes {
-
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private static final String TEST_URL = "https://www.urn.su/ui/basic_test/";
-    private static final String CHECKBOXES_ID = "cerseiId";
-
-    @BeforeEach
-    void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.get(TEST_URL);
-    }
-
-    @Test
-    void clickCheckboxesById() {
-        WebElement checkbox = wait.until(
-                ExpectedConditions.elementToBeClickable(By.id(CHECKBOXES_ID))
-        );
-        checkbox.click();
-        assertTrue(checkbox.isSelected(), "Чекбокс не был выбран");
-
-    }
-    @AfterEach
-    void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-}
-```
- * Клик определенного радиобаттона
-```java
-package tests;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public class WebDriverCheckboxes {
-
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private static final String TEST_URL = "https://www.urn.su/ui/basic_test/";
-    private static final String CHECKBOXES_ID = "cerseiId";
-
-    @BeforeEach
-    void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.get(TEST_URL);
-    }
-
-    @Test
-    void clickCheckboxesById() {
-        WebElement checkbox = wait.until(
-                ExpectedConditions.elementToBeClickable(By.id(CHECKBOXES_ID))
-        );
-        checkbox.click();
-        assertTrue(checkbox.isSelected(), "Чекбокс не был выбран");
-
-    }
-    @AfterEach
-    void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-}
-```
-* Поиск по CSS селектору
-```java
-package tests;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-public class TestItalia {
-    private WebDriver driver;
-    private WebDriverWait wait;
-
-    private static final String TEST_URL = "https://www.urn.su/ui/basic_test/";
-    private static final String LINK_SELECTOR = "a[class='march8']";
-    private static final String EXPECTED_TITLE = "8 марта в Италии в 2026 году";
-
-
-    @BeforeEach
-    void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();// на весь экран окно
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));//задержка на 10 сек
-        driver.get(TEST_URL);
-    }
-
-    @Test
-    void clickLinkByCssSelectorAndCheckTitle() {
-        WebElement march8Link = wait.until(
-                ExpectedConditions.presenceOfElementLocated(By.cssSelector(LINK_SELECTOR))
-        );
-        ((JavascriptExecutor) driver).executeScript(// браузер пролистывает до конкретного элемента с которым работаем
-                "arguments[0].scrollIntoView({block: 'center'});",
-                march8Link
-        );
-        wait.until(ExpectedConditions.elementToBeClickable(march8Link)).click();
-        wait.until(ExpectedConditions.titleIs(EXPECTED_TITLE));// ждем пока заголовок станет равным нашему заголовку
-        String actualTitle = driver.getTitle();
-        assertEquals(EXPECTED_TITLE, actualTitle, "Заголовок не совпал");
-    }
-
-    @AfterEach
-    void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-}
-```
-* Поиск по заголовку (text)
+### Примеры тестов будет продемонстрирован на базе сайта [МАОУ "Прогимназия Кристаллик"](https://kristallik-sar.gosuslugi.ru/):
+ * Поиск по заголовку через xPath:
 ```java
 package tests;
 
@@ -587,49 +426,50 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//Джун
-public class TestLinkText {
+public class TestKristallikRules {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    private static final String TEST_URL = "https://www.urn.su/ui/basic_test/";
-    private static final String LINK_TEXT = "Renovation";
-    private static final String EXPECTED_TITLE = "Ремонт квартир на Коста-дель-Соль";
+    private static final By LINK_LOCATOR = By.xpath("//a[contains(., 'Правила приема в школу')]");
+    private static final String EXPECTED_TITLE = "Правила приема";
+    private static final String TEST_URL = "https://kristallik-sar.gosuslugi.ru/";
 
     @BeforeEach
-    void setUp() {//манипуляция браузером
-        WebDriverManager.chromedriver().setup();              
+    void setUp() {
+        WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-        driver.manage().window().maximize();// на весь экран окно
+        driver.manage().window().maximize();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get(TEST_URL);
     }
 
     @Test
-    void clickLinkByTextTest() {// САМ ТЕСТ
-        WebElement renovationLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText(LINK_TEXT)));
-
-        ((JavascriptExecutor) driver).executeScript(// браузер пролистывает до конкретного элемента с которым работаем
-                "arguments[0].scrollIntoView({block: 'center'});",
-                renovationLink
+    void clickLinkByTextSelectorAndCheckTitle() {
+        WebElement linkElement = wait.until(
+                ExpectedConditions.elementToBeClickable(LINK_LOCATOR)
         );
-        wait.until(ExpectedConditions.elementToBeClickable(renovationLink)).click();
-
-        wait.until(ExpectedConditions.titleIs(EXPECTED_TITLE));// ждем пока заголовок станет равным нашему заголовку
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});",
+                linkElement
+        );
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+                linkElement
+        );
+        wait.until(ExpectedConditions.titleContains(EXPECTED_TITLE));
         String actualTitle = driver.getTitle();
-        assertEquals(EXPECTED_TITLE, actualTitle, "Заголовок не совпал");// проверка ожидаемого результата
+        System.out.println("Текущий заголовок: " + actualTitle + " - Проверка пройдена успешно!");
+        assertTrue(actualTitle.contains(EXPECTED_TITLE),
+                "Заголовок '" + actualTitle + "' не содержит ожидаемой фразы '" + EXPECTED_TITLE + "'");
     }
 
     @AfterEach
-    void tearDown() {// ЗАКРЫВАЕМ ТЕСТ
+    void tearDown() {
         if (driver != null) {
             driver.quit();
         }
     }
-
 }
 ```
-* Поиск по тексту в таблице:
+ * Текст внутри элемента через CSS-селектор (Учи.ру) :
 ```java
 package tests;
 
@@ -638,6 +478,139 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class TestToServiceUchiRu {
+    private WebDriver driver;
+    private WebDriverWait wait;
+
+    private static final By SERVICES_LOCATOR = By.linkText("Услуги и сервисы");
+    private static final By UCHI_CSS_LOCATOR = By.cssSelector("a[href^='https://uchi.ru']");
+    private static final String TEST_URL = "https://kristallik-sar.gosuslugi.ru/";
+
+    @BeforeEach
+    void setUp() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TEST_URL);
+    }
+
+    @Test
+    void serviceLinkWithMenuClick() {
+        WebElement servicesMenu = wait.until(
+                ExpectedConditions.elementToBeClickable(SERVICES_LOCATOR) //Ждем и кликаем на "Услуги и сервисы" в главном меню
+        );
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", servicesMenu
+        );
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].click();", servicesMenu
+        );
+
+        WebElement uchiLink = wait.until(
+                ExpectedConditions.presenceOfElementLocated(UCHI_CSS_LOCATOR)// Ждем появления карточки Учи.ру на открывшейся странице по CSS-селектору
+        );
+
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", uchiLink // Проскролливаем страницу до карточки Учи.ру, чтобы она отображалась
+        );
+
+        String actualLinkText = uchiLink.getText();
+        System.out.println("Текст внутри найденного CSS-элемента: " + actualLinkText);
+
+        assertTrue(actualLinkText.toLowerCase().contains("учи.ру"), // Проверка, что текст карточки содержит слово "Учи.ру"
+                "Текст внутри блока не содержит слово Учи.ру! Получено: " + actualLinkText);
+
+        System.out.println("Тест успешно пройден!");
+    }
+
+    @AfterEach
+    void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+```
+* Проверка ссылки расписания By.linkText:
+```java
+package tests;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class TestSheduleOpen {
+    private WebDriver driver;
+    private WebDriverWait wait;
+
+    private static final By SCHEDULE_MENU_LOCATOR = By.linkText("Расписание");
+    private static final String EXPECTED_URL = "https://disk.yandex.ru/i/zEViogQ8pJNBmw";
+    private static final String TEST_URL = "https://kristallik-sar.gosuslugi.ru/";
+
+    @BeforeEach
+    void setUp() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TEST_URL);
+    }
+
+    @Test
+    void verifyScheduleLinkIsCorrect() {
+        WebElement scheduleMenu = wait.until(
+                ExpectedConditions.presenceOfElementLocated(SCHEDULE_MENU_LOCATOR)
+        );
+        String actualUrlFromAttribute = scheduleMenu.getAttribute("href");
+        System.out.println("Ссылка на кнопке расписания: " + actualUrlFromAttribute);
+
+        assertTrue(actualUrlFromAttribute.toLowerCase().contains("zeviogq8pjnbmw"),
+                "На сайте школы изменилась или прописана неверная ссылка на расписание! Получено: " + actualUrlFromAttribute);
+        System.out.println("Проверка атрибута выполнена успешно!");
+    }
+
+    @AfterEach
+    void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+```
+* Проверка ссылок социальных сетей через List WebElement и CSS-селектор:
+```java
+package tests;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -647,13 +620,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class TableValueTest {
+public class TestSocialMediaLinks { //  Мы ищем все ссылки <a> на странице, у которых в href есть vk.com или ok.ru
     private WebDriver driver;
     private WebDriverWait wait;
-    private static final String TEST_URL = "https://www.urn.su/ui/basic_test/";
-    private static final String TEST_TABLE_CLASS = "basictable";
-    private static final String EXPECTED_TEXT = "Travel, Holidays";
+
+    private static final By SOCIAL_LINKS_SELECTOR = By.cssSelector("a[href*='vk.com'], a[href*='ok.ru']");
+    private static final String TEST_URL = "https://kristallik-sar.gosuslugi.ru/";
 
     @BeforeEach
     void setUp() {
@@ -665,15 +639,97 @@ public class TableValueTest {
     }
 
     @Test
-    void findByText() {
-        WebElement table = wait.until(ExpectedConditions.presenceOfElementLocated(By.className(TEST_TABLE_CLASS)));
-        String tableText = table.getText();
+    void SocialLinksOnMainPage() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(SOCIAL_LINKS_SELECTOR));// Ждем появления хотя бы одной ссылки из блока соцсетей
 
-        if (tableText.contains(EXPECTED_TEXT)) {// -если строка tableText содержит Expected Text, то выведи на экран...
-            System.out.println("Найден текст: " + EXPECTED_TEXT);
-        } else {
-            throw new AssertionError("Текст '" + EXPECTED_TEXT + "' не найден в таблице");
+        List<WebElement> socialLinksList = driver.findElements(SOCIAL_LINKS_SELECTOR);
+        System.out.println("Количество найденных иконок соцсетей на главной странице: " + socialLinksList.size()); // Печать количества иконок соц.сетей, которые найдены.
+
+        assertFalse(socialLinksList.isEmpty(), "На сайте школы не найдено ни одной ссылки-иконки на ВК или Одноклассники!");
+
+        for (WebElement link : socialLinksList) {
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({block: 'center'});",
+                    link
+            );
+            // Получаем точный адрес группы школы
+            String socialHref = link.getAttribute("href");
+            System.out.println("Успешно найдена  ссылка/и соцсети/ей: " + socialHref);
         }
+        System.out.println("Тест проверки списков социальных сетей пройден!");
+    }
+
+    @AfterEach
+    void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+```
+* Поиск e-mail Директора с помощью xPath:
+```java
+package tests;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class TestDirectorEmail {
+    private WebDriver driver;
+    private WebDriverWait wait;
+
+    private static final By DIRECTOR_EMAIL_LOCATOR = By.xpath("//a[contains(@href, 'mailto:sar-kristallik@mail.ru')]");
+    private static final By MENU_LOCATOR = By.xpath("//a[text()='Руководство']");
+    private static final String EXPECTED_TITLE = "Руководство";
+    private static final String TEST_URL = "https://kristallik-sar.gosuslugi.ru/";
+
+    @BeforeEach
+    void setUp() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get(TEST_URL);
+    }
+
+    @Test
+    void checkDirectorEmailOnPage() {
+        WebElement linkElement = wait.until(
+                ExpectedConditions.elementToBeClickable(MENU_LOCATOR)
+        );
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});",
+                linkElement
+        );
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+                linkElement
+        );
+        wait.until(ExpectedConditions.titleContains(EXPECTED_TITLE));// Ждем, пока ссылка с email директора появится в DOM-дереве
+        WebElement emailLink = wait.until(
+                ExpectedConditions.presenceOfElementLocated(DIRECTOR_EMAIL_LOCATOR)
+        );
+        
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});",
+                emailLink
+        );
+
+        assertTrue(emailLink.isDisplayed(), "Email директора не найден!");
+
+        String actualEmailText = emailLink.getText();
+        System.out.println("Найден email директора: " + actualEmailText + "\nПроверка пройдена успешно!");
     }
 
     @AfterEach
@@ -685,5 +741,5 @@ public class TableValueTest {
 }
 ```
 
-
+<p align="center"><b>На этом репозиторий подошел к концу! :neckbeard: <br>Всем спасибо за внимание! :godmode: </b></p>
 
